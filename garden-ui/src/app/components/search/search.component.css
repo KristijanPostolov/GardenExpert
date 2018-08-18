@@ -1,0 +1,20 @@
+.hub-item:hover{
+  cursor: pointer;
+  background: lightgrey;
+}
+
+.hub-item em{
+  display: none;
+}
+
+.hub-item:hover em{
+  display: block;
+}
+
+i.online {
+  color: green;
+}
+
+i.offline {
+  color: grey;
+}

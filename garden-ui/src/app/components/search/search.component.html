@@ -1,0 +1,34 @@
+<div class="container">
+  <div class="row" style="margin-top: 20px; margin-bottom: 20px">
+    <div class="col-md-8 offset-2">
+      <div class="input-group">
+        <input #searchBar (keyup)="updateTerm(searchBar.value)" type="text"
+               class="form-control" placeholder="Search sensor hubs...">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button">
+            <i class="fa fa-search"></i>
+          </button>
+        </span>
+      </div><!-- /input-group -->
+    </div><!-- /.col-lg-6 -->
+  </div><!-- /.row -->
+
+  <div *ngIf="hubs">
+    <div *ngFor="let hub of hubs" class="list-group-item col-md-6 offset-3 hub-item" style="padding: 10px;" routerLink="/details/{{hub.id}}">
+      <table>
+        <tr>
+          <td class="align-middle col-md-10">
+            <b>Mac: {{hub.macAddress}}</b>
+            <em>Last measurement: {{hub.lastMeasurement}}</em>
+          </td>
+          <td class="align-middle col-md-2">
+            <span *ngIf="hub.isConnected"><i class="fa fa-signal online"></i></span>
+            <span *ngIf="!hub.isConnected"><i class="fa fa-signal offline"></i></span>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+</div>
+

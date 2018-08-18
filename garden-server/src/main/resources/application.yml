@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/garden_expert
+    username: postgres
+    password: admin
+  jpa:
+    hibernate:
+      ddl-auto: validate
