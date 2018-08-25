@@ -1,5 +1,6 @@
 package com.garden.server.controller;
 
+import com.garden.server.model.HubConfiguration;
 import com.garden.server.model.Measurement;
 import com.garden.server.model.MeasurementType;
 import com.garden.server.model.SensorHub;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/hubs")
@@ -31,15 +31,29 @@ public class HubsController {
     }
 
     @GetMapping
-    public List<SensorHub> getSensorHubs(@RequestParam(value = "query", required = false) String query,
-                                         @RequestParam(value = "page", required = false) Integer page,
-                                         @RequestParam(value = "limit", required = false) Integer limit) {
-        return sensorHubService.getSensorHubs(query, page, limit);
+    public ResponseEntity<List<SensorHub>> getSensorHubs(
+            @RequestParam(value = "mac", required = false) String macQuery,
+            @RequestParam(value = "name", required = false) String nameQuery,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "limit", required = false) Integer limit) {
+        if (macQuery != null && nameQuery == null) {
+            return ResponseEntity.ok(sensorHubService.getSensorHubsByMac(macQuery, page, limit));
+        } else if (macQuery == null && nameQuery != null) {
+            return ResponseEntity.ok(sensorHubService.getSensorHubsByName(nameQuery, page, limit));
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/{mac}")
     public ResponseEntity<SensorHub> getSensorHub(@PathVariable("mac") String mac) {
         return sensorHubService.findByMac(mac)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PatchMapping("/{mac}/name")
+    public ResponseEntity<SensorHub> updateName(@PathVariable("mac") String mac, @RequestBody String name) {
+        return sensorHubService.updateName(mac, name)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -65,6 +79,13 @@ public class HubsController {
         return measurementService.getMeasurements(mac, from, to, type)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{mac}/config")
+    public HubConfiguration getHubConfiguration(@PathVariable("mac") String mac) {
+        return sensorHubService.findByMac(mac)
+                .map(SensorHub::getHubConfiguration)
+                .orElse(null);
     }
 
 }

@@ -18,3 +18,14 @@ i.online {
 i.offline {
   color: grey;
 }
+
+.edit:hover .icon-normal,
+.edit .icon-hover {
+  display: none;
+}
+
+.edit:hover .icon-hover {
+  display: inline;
+}
+
+

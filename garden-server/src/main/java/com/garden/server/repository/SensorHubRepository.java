@@ -12,7 +12,12 @@ import java.util.Optional;
 public interface SensorHubRepository extends JpaRepository<SensorHub, Long> {
 
     Optional<SensorHub> findByMacAddress(String macAddress);
+
+    //TODO: ignore case
     List<SensorHub> findByMacAddressStartingWithOrderByLastMeasurementDesc(String mac);
     List<SensorHub> findByMacAddressStartingWithOrderByLastMeasurementDesc(String mac, Pageable pageable);
+
+    List<SensorHub> findByNameStartingWithOrderByLastMeasurementDesc(String name);
+    List<SensorHub> findByNameStartingWithOrderByLastMeasurementDesc(String name, Pageable pageable);
 
 }
