@@ -17,19 +17,33 @@ public class HubConfigurationService {
     // Default configuration values
     private final int defaultUpdateIntervalInSeconds;
     private final boolean defaultAutoControl;
+    private final float defaultMinTemperatureCelsius;
+    private final float defaultMaxTemperatureCelsius;
+    private final float defaultMinSoilMoisture;
+    private final int defaultWateringTimeInSeconds;
 
     private final HubConfigurationRepository repository;
 
     public HubConfigurationService(@Value("${update-interval-in-seconds}") Integer defaultUpdateIntervalInSeconds,
                                    @Value("${auto-control}") Boolean defaultAutoControl,
+                                   @Value("${min-temperature-celsius}") Float defaultMinTemperatureCelsius,
+                                   @Value("${max-temperature-celsius}") Float defaultMaxTemperatureCelsius,
+                                   @Value("${min-soil-moisture}") Float defaultMinSoilMoisture,
+                                   @Value("${watering-time-in-seconds}") Integer defaultWateringTimeInSeconds,
                                    HubConfigurationRepository repository) {
         this.defaultUpdateIntervalInSeconds = defaultUpdateIntervalInSeconds;
         this.defaultAutoControl = defaultAutoControl;
+        this.defaultMinTemperatureCelsius = defaultMinTemperatureCelsius;
+        this.defaultMaxTemperatureCelsius = defaultMaxTemperatureCelsius;
+        this.defaultMinSoilMoisture = defaultMinSoilMoisture;
+        this.defaultWateringTimeInSeconds = defaultWateringTimeInSeconds;
         this.repository = repository;
     }
 
     public HubConfiguration generateDefault(SensorHub sensorHub) {
-        return new HubConfiguration(sensorHub, defaultUpdateIntervalInSeconds, defaultAutoControl);
+        return new HubConfiguration(sensorHub, defaultUpdateIntervalInSeconds, defaultAutoControl,
+                defaultMinTemperatureCelsius, defaultMaxTemperatureCelsius,
+                defaultMinSoilMoisture, defaultWateringTimeInSeconds);
     }
 
     public Optional<HubConfiguration> getConfigurationForHubId(Long hubId) {

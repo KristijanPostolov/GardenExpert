@@ -4,6 +4,6 @@ public enum MeasurementType {
 
     TEMPERATURE,
     HUMIDITY,
-    SOIL_HUMIDITY
+    SOIL_MOISTURE
 
 }

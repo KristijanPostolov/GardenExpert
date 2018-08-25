@@ -1,2 +1,6 @@
 update-interval-in-seconds: 300
 auto-control: false
+min-temperature-celsius: 20.5
+max-temperature-celsius: 23.5
+min-soil-moisture: 20.5
+watering-time-in-seconds: 60
