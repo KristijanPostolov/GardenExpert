@@ -33,8 +33,7 @@ public class MeasurementService {
     public Measurement addMeasurement(String hubMacAddress, MeasurementRequest request) {
         SensorHub sensorHub = sensorHubService.getOrCreateByMac(hubMacAddress);
         LocalDateTime now = LocalDateTime.now();
-        Measurement measurement = new Measurement(request.getType(), request.getValue(), request.getUnit(),
-                now, sensorHub);
+        Measurement measurement = new Measurement(request.type, request.value, request.unit, now, sensorHub);
         log.info("Updating last measurement time for [{}]", hubMacAddress);
         sensorHub.setLastMeasurement(now);
         log.info("Saving new measurement for sensor hub [{}]", hubMacAddress);
