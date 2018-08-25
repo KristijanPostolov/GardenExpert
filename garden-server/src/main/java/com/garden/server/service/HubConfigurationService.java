@@ -46,10 +46,6 @@ public class HubConfigurationService {
                 defaultMinSoilMoisture, defaultWateringTimeInSeconds);
     }
 
-    public Optional<HubConfiguration> getConfigurationForHubId(Long hubId) {
-        return repository.findBySensorHub_Id(hubId);
-    }
-
     public Optional<HubConfiguration> getConfigurationForMacAddress(String macAddress) {
         return repository.findBySensorHub_MacAddress(macAddress);
     }
@@ -60,6 +56,10 @@ public class HubConfigurationService {
                 .map(hubConfiguration -> {
                     hubConfiguration.setUpdateIntervalInSeconds(request.updateIntervalInSeconds);
                     hubConfiguration.setAutoControl(request.autoControl);
+                    hubConfiguration.setMinTemperatureCelsius(request.minTemperatureCelsius);
+                    hubConfiguration.setMaxTemperatureCelsius(request.maxTemperatureCelsius);
+                    hubConfiguration.setMinSoilMoisture(request.minSoilMoisture);
+                    hubConfiguration.setWateringTimeInSeconds(request.wateringTimeInSeconds);
                     return hubConfiguration;
                 });
     }

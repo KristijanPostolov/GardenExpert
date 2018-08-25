@@ -10,7 +10,6 @@ import java.util.Optional;
 public interface HubConfigurationRepository extends JpaRepository<HubConfiguration, Long> {
 
     Optional<HubConfiguration> findById(Long id);
-    Optional<HubConfiguration> findBySensorHub_Id(Long sensorHubId);
     Optional<HubConfiguration> findBySensorHub_MacAddress(String macAddress);
 
 }
