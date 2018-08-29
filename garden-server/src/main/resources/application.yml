@@ -5,7 +5,7 @@ spring:
     password: admin
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
 
 mqtt:
   broker-url: tcp://localhost:1883
@@ -13,3 +13,4 @@ mqtt:
   topics:
     connection: +/connection
     measurement: +/measurement
+    status-update: +/statusUpdate

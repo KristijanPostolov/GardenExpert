@@ -27,6 +27,10 @@ public class SensorHub {
     @JsonIgnoreProperties("sensorHub")
     private HubConfiguration hubConfiguration;
 
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "sensorHub")
+    @JsonIgnoreProperties("sensorHub")
+    private HubStatus hubStatus;
+
     public SensorHub() {
     }
 
@@ -83,5 +87,13 @@ public class SensorHub {
 
     public void setHubConfiguration(HubConfiguration hubConfiguration) {
         this.hubConfiguration = hubConfiguration;
+    }
+
+    public HubStatus getHubStatus() {
+        return hubStatus;
+    }
+
+    public void setHubStatus(HubStatus hubStatus) {
+        this.hubStatus = hubStatus;
     }
 }

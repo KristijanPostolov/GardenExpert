@@ -1,7 +1,9 @@
 package com.garden.server.messaging;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.garden.server.messaging.listeners.ConnectionListener;
 import com.garden.server.messaging.listeners.MeasurementListener;
+import com.garden.server.messaging.listeners.StatusUpdateListener;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -12,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.support.json.Jackson2JsonObjectMapper;
 
+import java.text.SimpleDateFormat;
 
 @Configuration
 public class MqttConfiguration {
@@ -24,7 +27,9 @@ public class MqttConfiguration {
                                  @Value("${mqtt.topics.connection}") String connectionTopic,
                                  ConnectionListener connectionListener,
                                  @Value("${mqtt.topics.measurement}") String measurementTopic,
-                                 MeasurementListener measurementListener) throws MqttException {
+                                 MeasurementListener measurementListener,
+                                 @Value("${mqtt.topics.status-update}") String statusUpdateTopic,
+                                 StatusUpdateListener statusUpdateListener) throws MqttException {
         MqttClient mqttClient = new MqttClient(brokerUrl, clientId);
         MqttConnectOptions options = new MqttConnectOptions();
         options.setAutomaticReconnect(true);
@@ -35,6 +40,7 @@ public class MqttConfiguration {
 
         mqttClient.subscribe(connectionTopic, connectionListener);
         mqttClient.subscribe(measurementTopic, measurementListener);
+        mqttClient.subscribe(statusUpdateTopic, statusUpdateListener);
         return mqttClient;
     }
 

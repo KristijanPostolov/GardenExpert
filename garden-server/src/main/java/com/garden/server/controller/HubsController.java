@@ -1,12 +1,9 @@
 package com.garden.server.controller;
 
-import com.garden.server.model.HubConfiguration;
 import com.garden.server.model.Measurement;
 import com.garden.server.model.MeasurementType;
 import com.garden.server.model.SensorHub;
-import com.garden.server.model.request.HubConfigurationRequest;
-import com.garden.server.model.request.MeasurementRequest;
-import com.garden.server.service.HubConfigurationService;
+import com.garden.server.messaging.messages.MeasurementMessage;
 import com.garden.server.service.MeasurementService;
 import com.garden.server.service.SensorHubService;
 import org.slf4j.Logger;
@@ -26,13 +23,10 @@ public class HubsController {
 
     private final SensorHubService sensorHubService;
     private final MeasurementService measurementService;
-    private final HubConfigurationService hubConfigurationService;
 
-    public HubsController(SensorHubService sensorHubService, MeasurementService measurementService,
-                          HubConfigurationService hubConfigurationService) {
+    public HubsController(SensorHubService sensorHubService, MeasurementService measurementService) {
         this.sensorHubService = sensorHubService;
         this.measurementService = measurementService;
-        this.hubConfigurationService = hubConfigurationService;
     }
 
     @GetMapping
@@ -65,7 +59,7 @@ public class HubsController {
 
 
     @PostMapping("/{mac}/measurements")
-    public Measurement recordMeasurement(@PathVariable("mac") String mac, @RequestBody MeasurementRequest measurement) {
+    public Measurement recordMeasurement(@PathVariable("mac") String mac, @RequestBody MeasurementMessage measurement) {
         log.info("Received [{}] measurement from [{}]", measurement.type, mac);
         return measurementService.addMeasurement(mac, measurement);
     }
@@ -82,21 +76,6 @@ public class HubsController {
 
             @RequestParam(value = "type", required = false) MeasurementType type) {
         return measurementService.getMeasurements(mac, from, to, type)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/{mac}/config")
-    public ResponseEntity<HubConfiguration> getHubConfiguration(@PathVariable("mac") String mac) {
-        return hubConfigurationService.getConfigurationForMacAddress(mac)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @PatchMapping("/{mac}/config")
-    public ResponseEntity<HubConfiguration> updateConfiguration(@PathVariable("mac") String mac,
-                                                                @RequestBody HubConfigurationRequest request) {
-        return hubConfigurationService.updateConfigurationForMacAddress(mac, request)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

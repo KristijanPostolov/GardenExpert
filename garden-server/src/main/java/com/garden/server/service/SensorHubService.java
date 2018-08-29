@@ -1,6 +1,7 @@
 package com.garden.server.service;
 
 import com.garden.server.model.HubConfiguration;
+import com.garden.server.model.HubStatus;
 import com.garden.server.model.SensorHub;
 import com.garden.server.repository.SensorHubRepository;
 import org.slf4j.Logger;
@@ -20,10 +21,13 @@ public class SensorHubService {
 
     private final SensorHubRepository repository;
     private final HubConfigurationService hubConfigurationService;
+    private final HubStatusService hubStatusService;
 
-    public SensorHubService(SensorHubRepository repository, HubConfigurationService hubConfigurationService) {
+    public SensorHubService(SensorHubRepository repository, HubConfigurationService hubConfigurationService,
+                            HubStatusService hubStatusService) {
         this.repository = repository;
         this.hubConfigurationService = hubConfigurationService;
+        this.hubStatusService = hubStatusService;
     }
 
     public Optional<SensorHub> findByMac(String mac) {
@@ -39,6 +43,8 @@ public class SensorHubService {
                     SensorHub sensorHub = repository.save(new SensorHub(mac));
                     HubConfiguration hubConfiguration = hubConfigurationService.saveDefaultConfiguration(sensorHub);
                     sensorHub.setHubConfiguration(hubConfiguration);
+                    HubStatus hubStatus = hubStatusService.saveDefaultStatus(sensorHub);
+                    sensorHub.setHubStatus(hubStatus);
                     return sensorHub;
                 });
     }

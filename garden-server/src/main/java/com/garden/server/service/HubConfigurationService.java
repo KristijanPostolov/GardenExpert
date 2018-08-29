@@ -9,8 +9,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @PropertySource("classpath:default_hub_configuration.yml")
 public class HubConfigurationService {
@@ -47,26 +45,18 @@ public class HubConfigurationService {
                 defaultMinTemperatureCelsius, defaultMaxTemperatureCelsius,
                 defaultMinSoilMoisture, defaultWateringTimeInSeconds);
         return repository.save(hubConfiguration);
-
-    }
-
-    public Optional<HubConfiguration> getConfigurationForMacAddress(String macAddress) {
-        return repository.findBySensorHub_MacAddress(macAddress);
     }
 
     @Transactional
-    public Optional<HubConfiguration> updateConfigurationForMacAddress(String macAddress,
-                                                                       HubConfigurationRequest request) {
-        return repository.findBySensorHub_MacAddress(macAddress)
-                .map(hubConfiguration -> {
-                    hubConfiguration.setUpdateIntervalInSeconds(request.updateIntervalInSeconds);
-                    hubConfiguration.setAutoControl(request.autoControl);
-                    hubConfiguration.setMinTemperatureCelsius(request.minTemperatureCelsius);
-                    hubConfiguration.setMaxTemperatureCelsius(request.maxTemperatureCelsius);
-                    hubConfiguration.setMinSoilMoisture(request.minSoilMoisture);
-                    hubConfiguration.setWateringTimeInSeconds(request.wateringTimeInSeconds);
-                    return hubConfiguration;
-                });
+    public HubConfiguration updateConfigurationForMacAddress(String macAddress, HubConfigurationRequest request) {
+        HubConfiguration hubConfiguration = repository.findBySensorHub_MacAddress(macAddress);
+        hubConfiguration.setUpdateIntervalInSeconds(request.updateIntervalInSeconds);
+        hubConfiguration.setAutoControl(request.autoControl);
+        hubConfiguration.setMinTemperatureCelsius(request.minTemperatureCelsius);
+        hubConfiguration.setMaxTemperatureCelsius(request.maxTemperatureCelsius);
+        hubConfiguration.setMinSoilMoisture(request.minSoilMoisture);
+        hubConfiguration.setWateringTimeInSeconds(request.wateringTimeInSeconds);
+        return hubConfiguration;
     }
 
 }

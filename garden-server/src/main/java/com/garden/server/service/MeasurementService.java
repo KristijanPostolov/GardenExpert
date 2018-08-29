@@ -3,7 +3,7 @@ package com.garden.server.service;
 import com.garden.server.model.Measurement;
 import com.garden.server.model.MeasurementType;
 import com.garden.server.model.SensorHub;
-import com.garden.server.model.request.MeasurementRequest;
+import com.garden.server.messaging.messages.MeasurementMessage;
 import com.garden.server.repository.MeasurementRepository;
 import com.garden.server.repository.specification.MeasurementSpecifications;
 import org.slf4j.Logger;
@@ -30,12 +30,12 @@ public class MeasurementService {
     }
 
     @Transactional
-    public Measurement addMeasurement(String hubMacAddress, MeasurementRequest request) {
+    public Measurement addMeasurement(String hubMacAddress, MeasurementMessage request) {
         SensorHub sensorHub = sensorHubService.getOrCreateByMac(hubMacAddress);
-        LocalDateTime now = LocalDateTime.now();
-        Measurement measurement = new Measurement(request.type, request.value, request.unit, now, sensorHub);
+        Measurement measurement = new Measurement(request.type, request.value, request.unit,
+                request.timestamp, sensorHub);
         log.info("Updating last measurement time for [{}]", hubMacAddress);
-        sensorHub.setLastMeasurement(now);
+        sensorHub.setLastMeasurement(request.timestamp);
         log.info("Saving new measurement for sensor hub [{}]", hubMacAddress);
         return repository.save(measurement);
     }
