@@ -9,14 +9,14 @@ import org.springframework.integration.support.json.Jackson2JsonObjectMapper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StatusUpdateListener extends MacPrefixTopicListener {
+public class StatusListener extends MacPrefixTopicListener {
 
-    private static final Logger log = LoggerFactory.getLogger(StatusUpdateListener.class);
+    private static final Logger log = LoggerFactory.getLogger(StatusListener.class);
 
     private final Jackson2JsonObjectMapper objectMapper;
     private final HubStatusService service;
 
-    public StatusUpdateListener(Jackson2JsonObjectMapper objectMapper, HubStatusService service) {
+    public StatusListener(Jackson2JsonObjectMapper objectMapper, HubStatusService service) {
         this.objectMapper = objectMapper;
         this.service = service;
     }
@@ -25,7 +25,7 @@ public class StatusUpdateListener extends MacPrefixTopicListener {
     public void handleMessage(String mac, MqttMessage message) {
         try {
             HubStatusMessage hubStatusMessage = objectMapper.fromJson(message.getPayload(), HubStatusMessage.class);
-            log.info("Status update received for [{}]", mac);
+            log.info("Status received for [{}]", mac);
             service.updateForMac(mac, hubStatusMessage);
         } catch (Exception e) {
             log.error("Could not deserialize message: [{}]", new String(message.getPayload()), e);

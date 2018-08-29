@@ -33,10 +33,15 @@ public class HubStatusService {
     }
 
     @Transactional
-    public HubStatus updateForMac(String mac, HubStatusMessage hubStatusMessage) {
+    public HubStatus updateForMac(String mac, HubStatusMessage message) {
         HubStatus hubStatus = repository.findBySensorHub_MacAddress(mac);
-        hubStatus.setHeaterActive(hubStatusMessage.heaterActive);
-        hubStatus.setSprinklerActive(hubStatusMessage.sprinklerActive);
+        if(message.isSame(hubStatus)) {
+            return hubStatus;
+        }
+
+        hubStatus.setHeaterActive(message.heaterActive);
+        hubStatus.setSprinklerActive(message.sprinklerActive);
+        // TODO: Publish update
         return hubStatus;
     }
 

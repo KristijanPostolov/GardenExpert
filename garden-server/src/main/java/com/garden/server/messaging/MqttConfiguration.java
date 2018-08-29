@@ -1,9 +1,9 @@
 package com.garden.server.messaging;
 
-import com.garden.server.messaging.listeners.ConfigurationUpdateListener;
+import com.garden.server.messaging.listeners.ConfigurationListener;
 import com.garden.server.messaging.listeners.ConnectionListener;
 import com.garden.server.messaging.listeners.MeasurementListener;
-import com.garden.server.messaging.listeners.StatusUpdateListener;
+import com.garden.server.messaging.listeners.StatusListener;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -26,10 +26,10 @@ public class MqttConfiguration {
                                  ConnectionListener connectionListener,
                                  @Value("${mqtt.topics.measurement}") String measurementTopic,
                                  MeasurementListener measurementListener,
-                                 @Value("${mqtt.topics.status-update}") String statusUpdateTopic,
-                                 StatusUpdateListener statusUpdateListener,
-                                 @Value("${mqtt.topics.configuration-update}") String configurationUpdateTopic,
-                                 ConfigurationUpdateListener configurationUpdateListener) throws MqttException {
+                                 @Value("${mqtt.topics.status}") String statusTopic,
+                                 StatusListener statusListener,
+                                 @Value("${mqtt.topics.configuration}") String configurationTopic,
+                                 ConfigurationListener configurationListener) throws MqttException {
 
         MqttClient mqttClient = new MqttClient(brokerUrl, clientId);
         MqttConnectOptions options = new MqttConnectOptions();
@@ -41,8 +41,8 @@ public class MqttConfiguration {
 
         mqttClient.subscribe(connectionTopic, connectionListener);
         mqttClient.subscribe(measurementTopic, measurementListener);
-        mqttClient.subscribe(statusUpdateTopic, statusUpdateListener);
-        mqttClient.subscribe(configurationUpdateTopic, configurationUpdateListener);
+        mqttClient.subscribe(statusTopic, statusListener);
+        mqttClient.subscribe(configurationTopic, configurationListener);
         return mqttClient;
     }
 

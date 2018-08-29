@@ -62,18 +62,23 @@ public class HubConfigurationService {
     }
 
     @Transactional
-    public HubConfiguration updateConfigurationForMacAddress(String macAddress, HubConfigurationMessage request) {
+    public HubConfiguration updateConfigurationForMacAddress(String macAddress, HubConfigurationMessage message) {
         HubConfiguration hubConfiguration = repository.findBySensorHub_MacAddress(macAddress);
-        hubConfiguration.setUpdateIntervalSeconds(request.updateIntervalInSeconds);
-        hubConfiguration.setAutoControl(request.autoControl);
-        hubConfiguration.setMinDailyCelsius(request.minDailyCelsius);
-        hubConfiguration.setTargetDailyCelsius(request.targetDailyCelsius);
-        hubConfiguration.setMinNightlyCelsius(request.minNightlyCelsius);
-        hubConfiguration.setTargetNightlyCelsius(request.targetNightlyCelsius);
-        hubConfiguration.setRegularWateringCycleSeconds(request.regularWateringCycleSeconds);
-        hubConfiguration.setRegularWateringDurationSeconds(request.regularWateringDurationSeconds);
-        hubConfiguration.setMinMoistureThreshold(request.minMoistureThreshold);
-        hubConfiguration.setTriggeredWateringDurationSeconds(request.triggeredWateringDurationSeconds);
+        if(message.isSame(hubConfiguration)) {
+            return hubConfiguration;
+        }
+
+        hubConfiguration.setUpdateIntervalSeconds(message.updateIntervalInSeconds);
+        hubConfiguration.setAutoControl(message.autoControl);
+        hubConfiguration.setMinDailyCelsius(message.minDailyCelsius);
+        hubConfiguration.setTargetDailyCelsius(message.targetDailyCelsius);
+        hubConfiguration.setMinNightlyCelsius(message.minNightlyCelsius);
+        hubConfiguration.setTargetNightlyCelsius(message.targetNightlyCelsius);
+        hubConfiguration.setRegularWateringCycleSeconds(message.regularWateringCycleSeconds);
+        hubConfiguration.setRegularWateringDurationSeconds(message.regularWateringDurationSeconds);
+        hubConfiguration.setMinMoistureThreshold(message.minMoistureThreshold);
+        hubConfiguration.setTriggeredWateringDurationSeconds(message.triggeredWateringDurationSeconds);
+        // TODO: Publish update
         return hubConfiguration;
     }
 

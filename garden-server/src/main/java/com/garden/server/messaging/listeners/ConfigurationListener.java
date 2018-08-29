@@ -9,14 +9,14 @@ import org.springframework.integration.support.json.Jackson2JsonObjectMapper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ConfigurationUpdateListener extends MacPrefixTopicListener {
+public class ConfigurationListener extends MacPrefixTopicListener {
 
-    private static final Logger log = LoggerFactory.getLogger(ConfigurationUpdateListener.class);
+    private static final Logger log = LoggerFactory.getLogger(ConfigurationListener.class);
 
     private final Jackson2JsonObjectMapper objectMapper;
     private final HubConfigurationService service;
 
-    public ConfigurationUpdateListener(Jackson2JsonObjectMapper objectMapper, HubConfigurationService service) {
+    public ConfigurationListener(Jackson2JsonObjectMapper objectMapper, HubConfigurationService service) {
         this.objectMapper = objectMapper;
         this.service = service;
     }
@@ -26,7 +26,7 @@ public class ConfigurationUpdateListener extends MacPrefixTopicListener {
         try {
             HubConfigurationMessage hubConfigurationMessage =
                     objectMapper.fromJson(message.getPayload(), HubConfigurationMessage.class);
-            log.info("Configuration update received from [{}]", mac);
+            log.info("Configuration received from [{}]", mac);
             service.updateConfigurationForMacAddress(mac, hubConfigurationMessage);
         } catch (Exception e) {
             log.error("Could not deserialize message: [{}]", new String(message.getPayload()), e);

@@ -13,5 +13,5 @@ mqtt:
   topics:
     connection: +/connection
     measurement: +/measurement
-    status-update: +/statusUpdate
-    configuration-update: +/configurationUpdate
+    status: +/status
+    configuration: +/configuration
