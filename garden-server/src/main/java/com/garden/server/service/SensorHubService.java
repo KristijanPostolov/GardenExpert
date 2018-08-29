@@ -37,7 +37,7 @@ public class SensorHubService {
                 .orElseGet(() -> {
                     log.info("Sensor hub [{}], does not exist. Creating new instance", mac);
                     SensorHub sensorHub = repository.save(new SensorHub(mac));
-                    HubConfiguration hubConfiguration = hubConfigurationService.generateDefault(sensorHub);
+                    HubConfiguration hubConfiguration = hubConfigurationService.saveDefaultConfiguration(sensorHub);
                     sensorHub.setHubConfiguration(hubConfiguration);
                     return sensorHub;
                 });

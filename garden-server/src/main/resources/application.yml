@@ -6,3 +6,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+
+mqtt:
+  broker-url: tcp://localhost:1883
+  client-id: webServer
+  topics:
+    connection: +/connection
+    measurement: +/measurement

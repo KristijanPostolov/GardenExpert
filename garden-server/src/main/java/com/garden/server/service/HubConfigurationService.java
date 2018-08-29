@@ -7,6 +7,7 @@ import com.garden.server.repository.HubConfigurationRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -40,16 +41,20 @@ public class HubConfigurationService {
         this.repository = repository;
     }
 
-    public HubConfiguration generateDefault(SensorHub sensorHub) {
-        return new HubConfiguration(sensorHub, defaultUpdateIntervalInSeconds, defaultAutoControl,
+    public HubConfiguration saveDefaultConfiguration(SensorHub sensorHub) {
+        HubConfiguration hubConfiguration = new HubConfiguration(sensorHub,
+                defaultUpdateIntervalInSeconds, defaultAutoControl,
                 defaultMinTemperatureCelsius, defaultMaxTemperatureCelsius,
                 defaultMinSoilMoisture, defaultWateringTimeInSeconds);
+        return repository.save(hubConfiguration);
+
     }
 
     public Optional<HubConfiguration> getConfigurationForMacAddress(String macAddress) {
         return repository.findBySensorHub_MacAddress(macAddress);
     }
 
+    @Transactional
     public Optional<HubConfiguration> updateConfigurationForMacAddress(String macAddress,
                                                                        HubConfigurationRequest request) {
         return repository.findBySensorHub_MacAddress(macAddress)
