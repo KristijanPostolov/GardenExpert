@@ -1,11 +1,9 @@
 package com.garden.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.temporal.TemporalUnit;
 
 @Entity
 @Table(name = "sensor_hub")
@@ -68,7 +66,7 @@ public class SensorHub {
     }
 
     public boolean getIsConnected() {
-        int updateIntervalInSeconds = hubConfiguration.getUpdateIntervalInSeconds();
+        int updateIntervalInSeconds = hubConfiguration.getUpdateIntervalSeconds();
         return lastMeasurement != null &&
                 lastMeasurement.isAfter(LocalDateTime.now().minusSeconds(updateIntervalInSeconds));
     }

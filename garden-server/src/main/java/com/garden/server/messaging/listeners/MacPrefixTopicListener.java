@@ -5,8 +5,6 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-
 public abstract class MacPrefixTopicListener implements IMqttMessageListener {
 
     private final Logger log = LoggerFactory.getLogger(MacPrefixTopicListener.class);

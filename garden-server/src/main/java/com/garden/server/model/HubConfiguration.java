@@ -17,37 +17,55 @@ public class HubConfiguration {
     @JsonIgnoreProperties("hubConfiguration")
     private SensorHub sensorHub;
 
-    @Column(name = "update_interval_in_seconds", nullable = false)
-    private int updateIntervalInSeconds;
+    @Column(name = "update_interval_seconds", nullable = false)
+    private int updateIntervalSeconds;
 
     @Column(name = "auto_control", nullable = false)
     private boolean autoControl;
 
-    @Column(name = "min_temperature_celsius", nullable = false)
-    private float minTemperatureCelsius;
+    @Column(name = "min_daily_celsius", nullable = false)
+    private float minDailyCelsius;
 
-    @Column(name = "max_temperature_celsius", nullable = false)
-    private float maxTemperatureCelsius;
+    @Column(name = "target_daily_celsius", nullable = false)
+    private float targetDailyCelsius;
 
-    @Column(name = "min_soil_moisture", nullable = false)
-    private float minSoilMoisture;
+    @Column(name = "min_nightly_celsius", nullable = false)
+    private float minNightlyCelsius;
 
-    @Column(name = "watering_time_in_seconds", nullable = false)
-    private int wateringTimeInSeconds;
+    @Column(name = "target_nightly_celsius", nullable = false)
+    private float targetNightlyCelsius;
+
+    @Column(name = "regular_watering_cycle_seconds", nullable = false)
+    private int regularWateringCycleSeconds;
+
+    @Column(name = "regular_watering_duration_seconds", nullable = false)
+    private int regularWateringDurationSeconds;
+
+    @Column(name = "min_moisture_threshold", nullable = false)
+    private float minMoistureThreshold;
+
+    @Column(name = "triggered_watering_duration_seconds", nullable = false)
+    private int triggeredWateringDurationSeconds;
 
     public HubConfiguration() {
     }
 
-    public HubConfiguration(SensorHub sensorHub, int updateIntervalInSeconds, boolean autoControl,
-                            float minTemperatureCelsius, float maxTemperatureCelsius,
-                            float minSoilMoisture, int wateringTimeInSeconds) {
+    public HubConfiguration(SensorHub sensorHub, int updateIntervalSeconds, boolean autoControl,
+                            float minDailyCelsius, float targetDailyCelsius,
+                            float minNightlyCelsius, float targetNightlyCelsius,
+                            int regularWateringCycleSeconds, int regularWateringDurationSeconds,
+                            float minMoistureThreshold, int triggeredWateringDurationSeconds) {
         this.sensorHub = sensorHub;
-        this.updateIntervalInSeconds = updateIntervalInSeconds;
+        this.updateIntervalSeconds = updateIntervalSeconds;
         this.autoControl = autoControl;
-        this.minTemperatureCelsius = minTemperatureCelsius;
-        this.maxTemperatureCelsius = maxTemperatureCelsius;
-        this.minSoilMoisture = minSoilMoisture;
-        this.wateringTimeInSeconds = wateringTimeInSeconds;
+        this.minDailyCelsius = minDailyCelsius;
+        this.targetDailyCelsius = targetDailyCelsius;
+        this.minNightlyCelsius = minNightlyCelsius;
+        this.targetNightlyCelsius = targetNightlyCelsius;
+        this.regularWateringCycleSeconds = regularWateringCycleSeconds;
+        this.regularWateringDurationSeconds = regularWateringDurationSeconds;
+        this.minMoistureThreshold = minMoistureThreshold;
+        this.triggeredWateringDurationSeconds = triggeredWateringDurationSeconds;
     }
 
     public Long getId() {
@@ -66,12 +84,12 @@ public class HubConfiguration {
         this.sensorHub = sensorHub;
     }
 
-    public int getUpdateIntervalInSeconds() {
-        return updateIntervalInSeconds;
+    public int getUpdateIntervalSeconds() {
+        return updateIntervalSeconds;
     }
 
-    public void setUpdateIntervalInSeconds(int updateIntervalInSeconds) {
-        this.updateIntervalInSeconds = updateIntervalInSeconds;
+    public void setUpdateIntervalSeconds(int updateIntervalSeconds) {
+        this.updateIntervalSeconds = updateIntervalSeconds;
     }
 
     public boolean isAutoControl() {
@@ -82,35 +100,67 @@ public class HubConfiguration {
         this.autoControl = autoControl;
     }
 
-    public float getMinTemperatureCelsius() {
-        return minTemperatureCelsius;
+    public float getMinDailyCelsius() {
+        return minDailyCelsius;
     }
 
-    public void setMinTemperatureCelsius(float minTemperatureCelsius) {
-        this.minTemperatureCelsius = minTemperatureCelsius;
+    public void setMinDailyCelsius(float minDailyCelsius) {
+        this.minDailyCelsius = minDailyCelsius;
     }
 
-    public float getMaxTemperatureCelsius() {
-        return maxTemperatureCelsius;
+    public float getTargetDailyCelsius() {
+        return targetDailyCelsius;
     }
 
-    public void setMaxTemperatureCelsius(float maxTemperatureCelsius) {
-        this.maxTemperatureCelsius = maxTemperatureCelsius;
+    public void setTargetDailyCelsius(float targetDailyCelsius) {
+        this.targetDailyCelsius = targetDailyCelsius;
     }
 
-    public float getMinSoilMoisture() {
-        return minSoilMoisture;
+    public float getMinNightlyCelsius() {
+        return minNightlyCelsius;
     }
 
-    public void setMinSoilMoisture(float minSoilMoisture) {
-        this.minSoilMoisture = minSoilMoisture;
+    public void setMinNightlyCelsius(float minNightlyCelsius) {
+        this.minNightlyCelsius = minNightlyCelsius;
     }
 
-    public int getWateringTimeInSeconds() {
-        return wateringTimeInSeconds;
+    public float getTargetNightlyCelsius() {
+        return targetNightlyCelsius;
     }
 
-    public void setWateringTimeInSeconds(int wateringTimeInSeconds) {
-        this.wateringTimeInSeconds = wateringTimeInSeconds;
+    public void setTargetNightlyCelsius(float targetNightlyCelsius) {
+        this.targetNightlyCelsius = targetNightlyCelsius;
+    }
+
+    public int getRegularWateringCycleSeconds() {
+        return regularWateringCycleSeconds;
+    }
+
+    public void setRegularWateringCycleSeconds(int regularWateringCycleSeconds) {
+        this.regularWateringCycleSeconds = regularWateringCycleSeconds;
+    }
+
+    public int getRegularWateringDurationSeconds() {
+        return regularWateringDurationSeconds;
+    }
+
+    public void setRegularWateringDurationSeconds(int regularWateringDurationSeconds) {
+        this.regularWateringDurationSeconds = regularWateringDurationSeconds;
+    }
+
+    public float getMinMoistureThreshold() {
+        return minMoistureThreshold;
+    }
+
+    public void setMinMoistureThreshold(float minMoistureThreshold) {
+        this.minMoistureThreshold = minMoistureThreshold;
+    }
+
+    public int getTriggeredWateringDurationSeconds() {
+        return triggeredWateringDurationSeconds;
+    }
+
+    public void setTriggeredWateringDurationSeconds(int triggeredWateringDurationSeconds) {
+        this.triggeredWateringDurationSeconds = triggeredWateringDurationSeconds;
     }
 }

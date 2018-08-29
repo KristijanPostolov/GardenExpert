@@ -2,7 +2,7 @@ package com.garden.server.service;
 
 import com.garden.server.model.HubConfiguration;
 import com.garden.server.model.SensorHub;
-import com.garden.server.model.request.HubConfigurationRequest;
+import com.garden.server.messaging.messages.HubConfigurationMessage;
 import com.garden.server.repository.HubConfigurationRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -14,48 +14,66 @@ import org.springframework.transaction.annotation.Transactional;
 public class HubConfigurationService {
 
     // Default configuration values
-    private final int defaultUpdateIntervalInSeconds;
-    private final boolean defaultAutoControl;
-    private final float defaultMinTemperatureCelsius;
-    private final float defaultMaxTemperatureCelsius;
-    private final float defaultMinSoilMoisture;
-    private final int defaultWateringTimeInSeconds;
+    private final int updateIntervalInSeconds;
+    private final boolean autoControl;
+    private final float minDailyCelsius;
+    private final float targetDailyCelsius;
+    private final float minNightlyCelsius;
+    private final float targetNightlyCelsius;
+    private final int regularWateringCycleSeconds;
+    private final int regularWateringDurationSeconds;
+    private final float minMoistureThreshold;
+    private final int triggeredWateringDurationSeconds;
 
     private final HubConfigurationRepository repository;
 
-    public HubConfigurationService(@Value("${update-interval-in-seconds}") Integer defaultUpdateIntervalInSeconds,
-                                   @Value("${auto-control}") Boolean defaultAutoControl,
-                                   @Value("${min-temperature-celsius}") Float defaultMinTemperatureCelsius,
-                                   @Value("${max-temperature-celsius}") Float defaultMaxTemperatureCelsius,
-                                   @Value("${min-soil-moisture}") Float defaultMinSoilMoisture,
-                                   @Value("${watering-time-in-seconds}") Integer defaultWateringTimeInSeconds,
+    public HubConfigurationService(@Value("${update-interval-seconds}") Integer updateIntervalInSeconds,
+                                   @Value("${auto-control}") Boolean autoControl,
+                                   @Value("${min-daily-celsius}") Float minDailyCelsius,
+                                   @Value("${target-daily-celsius}") Float targetDailyCelsius,
+                                   @Value("${min-nightly-celsius}") Float minNightlyCelsius,
+                                   @Value("${target-nightly-celsius}") Float targetNightlyCelsius,
+                                   @Value("${regular-watering-cycle-seconds}") Integer regularWateringCycleSeconds,
+                                   @Value("${regular-watering-duration-seconds}") Integer regularWateringDurationSeconds,
+                                   @Value("${min-moisture-threshold}") Float minMoistureThreshold,
+                                   @Value("${triggered-watering-duration-seconds}") Integer triggeredWateringDurationSeconds,
                                    HubConfigurationRepository repository) {
-        this.defaultUpdateIntervalInSeconds = defaultUpdateIntervalInSeconds;
-        this.defaultAutoControl = defaultAutoControl;
-        this.defaultMinTemperatureCelsius = defaultMinTemperatureCelsius;
-        this.defaultMaxTemperatureCelsius = defaultMaxTemperatureCelsius;
-        this.defaultMinSoilMoisture = defaultMinSoilMoisture;
-        this.defaultWateringTimeInSeconds = defaultWateringTimeInSeconds;
+        this.updateIntervalInSeconds = updateIntervalInSeconds;
+        this.autoControl = autoControl;
+        this.minDailyCelsius = minDailyCelsius;
+        this.targetDailyCelsius = targetDailyCelsius;
+        this.minNightlyCelsius = minNightlyCelsius;
+        this.targetNightlyCelsius = targetNightlyCelsius;
+        this.regularWateringCycleSeconds = regularWateringCycleSeconds;
+        this.regularWateringDurationSeconds = regularWateringDurationSeconds;
+        this.minMoistureThreshold = minMoistureThreshold;
+        this.triggeredWateringDurationSeconds = triggeredWateringDurationSeconds;
         this.repository = repository;
     }
 
     public HubConfiguration saveDefaultConfiguration(SensorHub sensorHub) {
         HubConfiguration hubConfiguration = new HubConfiguration(sensorHub,
-                defaultUpdateIntervalInSeconds, defaultAutoControl,
-                defaultMinTemperatureCelsius, defaultMaxTemperatureCelsius,
-                defaultMinSoilMoisture, defaultWateringTimeInSeconds);
+                updateIntervalInSeconds, autoControl,
+                minDailyCelsius, targetDailyCelsius,
+                minNightlyCelsius, targetNightlyCelsius,
+                regularWateringCycleSeconds, regularWateringDurationSeconds,
+                minMoistureThreshold, triggeredWateringDurationSeconds);
         return repository.save(hubConfiguration);
     }
 
     @Transactional
-    public HubConfiguration updateConfigurationForMacAddress(String macAddress, HubConfigurationRequest request) {
+    public HubConfiguration updateConfigurationForMacAddress(String macAddress, HubConfigurationMessage request) {
         HubConfiguration hubConfiguration = repository.findBySensorHub_MacAddress(macAddress);
-        hubConfiguration.setUpdateIntervalInSeconds(request.updateIntervalInSeconds);
+        hubConfiguration.setUpdateIntervalSeconds(request.updateIntervalInSeconds);
         hubConfiguration.setAutoControl(request.autoControl);
-        hubConfiguration.setMinTemperatureCelsius(request.minTemperatureCelsius);
-        hubConfiguration.setMaxTemperatureCelsius(request.maxTemperatureCelsius);
-        hubConfiguration.setMinSoilMoisture(request.minSoilMoisture);
-        hubConfiguration.setWateringTimeInSeconds(request.wateringTimeInSeconds);
+        hubConfiguration.setMinDailyCelsius(request.minDailyCelsius);
+        hubConfiguration.setTargetDailyCelsius(request.targetDailyCelsius);
+        hubConfiguration.setMinNightlyCelsius(request.minNightlyCelsius);
+        hubConfiguration.setTargetNightlyCelsius(request.targetNightlyCelsius);
+        hubConfiguration.setRegularWateringCycleSeconds(request.regularWateringCycleSeconds);
+        hubConfiguration.setRegularWateringDurationSeconds(request.regularWateringDurationSeconds);
+        hubConfiguration.setMinMoistureThreshold(request.minMoistureThreshold);
+        hubConfiguration.setTriggeredWateringDurationSeconds(request.triggeredWateringDurationSeconds);
         return hubConfiguration;
     }
 
