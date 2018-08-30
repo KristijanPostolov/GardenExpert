@@ -11,6 +11,7 @@ import java.util.Optional;
 @Repository
 public interface SensorHubRepository extends JpaRepository<SensorHub, Long> {
 
+    Optional<SensorHub> findById(Long id);
     Optional<SensorHub> findByMacAddress(String macAddress);
 
     //TODO: ignore case

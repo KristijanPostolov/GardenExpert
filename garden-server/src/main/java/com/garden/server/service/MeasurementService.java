@@ -40,25 +40,25 @@ public class MeasurementService {
         return repository.save(measurement);
     }
 
-    public Optional<List<Measurement>> getMeasurements(String hubMacAddress,
-                                                       LocalDateTime from,
-                                                       LocalDateTime to,
-                                                       MeasurementType type) {
-        return sensorHubService.findByMac(hubMacAddress)
-                .map(sensorHub -> {
-                    Specification<Measurement> specification = MeasurementSpecifications.byHubId(sensorHub.getId());
-                    if (from != null) {
-                        specification = specification.and(MeasurementSpecifications.from(from));
-                    }
-                    if (to != null) {
-                        specification = specification.and(MeasurementSpecifications.to(to));
-                    }
-                    if (type != null) {
-                        specification = specification.and(MeasurementSpecifications.ofType(type));
-                    }
-                    log.info("Finding measurements by sensor hub id [{}] and specification", sensorHub.getId(), specification);
-                    return repository.findAll(specification);
-                });
+    public Optional<List<Measurement>> getMeasurements(Long sensorHubId, LocalDateTime from,
+                                                       LocalDateTime to, MeasurementType type) {
+
+        if (!sensorHubService.existsById(sensorHubId)) {
+            return Optional.empty();
+        }
+
+        Specification<Measurement> specification = MeasurementSpecifications.byHubId(sensorHubId);
+        if (from != null) {
+            specification = specification.and(MeasurementSpecifications.from(from));
+        }
+        if (to != null) {
+            specification = specification.and(MeasurementSpecifications.to(to));
+        }
+        if (type != null) {
+            specification = specification.and(MeasurementSpecifications.ofType(type));
+        }
+        log.info("Finding measurements by sensor hub id [{}] and specification", sensorHubId);
+        return Optional.of(repository.findAll(specification));
     }
 
 }

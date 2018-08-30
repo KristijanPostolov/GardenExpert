@@ -30,23 +30,26 @@ public class SensorHubService {
         this.hubStatusService = hubStatusService;
     }
 
-    public Optional<SensorHub> findByMac(String mac) {
-        log.info("Finding sensor hub [{}]", mac);
-        return repository.findByMacAddress(mac);
+    public Optional<SensorHub> findById(Long id) {
+        log.info("Finding sensor hub [{}]", id);
+        return repository.findById(id);
     }
 
     @Transactional
     public SensorHub getOrCreateByMac(String mac) {
-        return findByMac(mac)
-                .orElseGet(() -> {
-                    log.info("Sensor hub [{}], does not exist. Creating new instance", mac);
-                    SensorHub sensorHub = repository.save(new SensorHub(mac));
-                    HubConfiguration hubConfiguration = hubConfigurationService.saveDefaultConfiguration(sensorHub);
-                    sensorHub.setHubConfiguration(hubConfiguration);
-                    HubStatus hubStatus = hubStatusService.saveDefaultStatus(sensorHub);
-                    sensorHub.setHubStatus(hubStatus);
-                    return sensorHub;
-                });
+        log.info("Finding sensor hub with mac [{}]", mac);
+        return repository.findByMacAddress(mac)
+                .orElseGet(() -> createWithMac(mac));
+    }
+
+    private SensorHub createWithMac(String mac) {
+        log.info("Sensor hub [{}], does not exist. Creating new instance", mac);
+        SensorHub sensorHub = repository.save(new SensorHub(mac));
+        HubConfiguration hubConfiguration = hubConfigurationService.saveDefaultConfiguration(sensorHub);
+        sensorHub.setHubConfiguration(hubConfiguration);
+        HubStatus hubStatus = hubStatusService.saveDefaultStatus(sensorHub);
+        sensorHub.setHubStatus(hubStatus);
+        return sensorHub;
     }
 
     public List<SensorHub> getSensorHubsByMac(String macQuery, Integer page, Integer limit) {
@@ -73,11 +76,15 @@ public class SensorHubService {
     }
 
     @Transactional
-    public Optional<SensorHub> updateName(String mac, String name) {
-        return repository.findByMacAddress(mac).map(sensorHub -> {
+    public Optional<SensorHub> updateName(Long id, String name) {
+        return repository.findById(id).map(sensorHub -> {
             sensorHub.setName(name);
             return sensorHub;
         });
+    }
+
+    public boolean existsById(Long id) {
+        return repository.existsById(id);
     }
 
 }
