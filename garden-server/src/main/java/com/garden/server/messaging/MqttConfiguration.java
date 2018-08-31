@@ -21,15 +21,7 @@ public class MqttConfiguration {
 
     @Bean
     public MqttClient mqttClient(@Value("${mqtt.broker-url}") String brokerUrl,
-                                 @Value("${mqtt.client-id}") String clientId,
-                                 @Value("${mqtt.topics.connection}") String connectionTopic,
-                                 ConnectionListener connectionListener,
-                                 @Value("${mqtt.topics.measurement}") String measurementTopic,
-                                 MeasurementListener measurementListener,
-                                 @Value("${mqtt.topics.status}") String statusTopic,
-                                 StatusListener statusListener,
-                                 @Value("${mqtt.topics.configuration}") String configurationTopic,
-                                 ConfigurationListener configurationListener) throws MqttException {
+                                 @Value("${mqtt.client-id}") String clientId) throws MqttException {
 
         MqttClient mqttClient = new MqttClient(brokerUrl, clientId);
         MqttConnectOptions options = new MqttConnectOptions();
@@ -38,11 +30,6 @@ public class MqttConfiguration {
         log.info("Connecting MQTT client [{}] to broker [{}]", clientId, brokerUrl);
         mqttClient.connect(options);
         log.info("Connected successfully");
-
-        mqttClient.subscribe(connectionTopic, connectionListener);
-        mqttClient.subscribe(measurementTopic, measurementListener);
-        mqttClient.subscribe(statusTopic, statusListener);
-        mqttClient.subscribe(configurationTopic, configurationListener);
         return mqttClient;
     }
 
