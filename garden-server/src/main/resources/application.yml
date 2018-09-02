@@ -12,7 +12,7 @@ spring:
           lob:
             non_contextual_creation: true
 mqtt:
-  broker-url: tcp://localhost:1883
+  broker-url: tcp://localhost:1885
   client-id: webServer
   topics:
     connection: +/connection
