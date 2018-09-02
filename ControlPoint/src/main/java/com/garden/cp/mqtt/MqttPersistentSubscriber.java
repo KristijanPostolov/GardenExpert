@@ -27,6 +27,7 @@ public class MqttPersistentSubscriber implements MqttCallbackExtended {
         if(subscriptions.containsKey(topic)) {
             return;
         }
+        log.info("Subscribing to [{}]", topic);
         subscriptions.put(topic, listener);
         try {
             mqttClient.subscribe(topic, listener);

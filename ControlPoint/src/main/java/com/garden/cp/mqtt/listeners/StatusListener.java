@@ -48,7 +48,6 @@ public class StatusListener extends MacPrefixTopicListener {
 
     public void addSubscription(String mac) {
         String topic = topicTemplate.replace("+", mac);
-        log.info("Subscribing to [{}]", topic);
         remoteSubscriber.subscribe(topic, this);
     }
 

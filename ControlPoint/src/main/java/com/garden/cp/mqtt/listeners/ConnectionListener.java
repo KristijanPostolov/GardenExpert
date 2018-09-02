@@ -11,20 +11,23 @@ public class ConnectionListener extends MacPrefixTopicListener {
 
     private final SensorHubService service;
     private final StatusListener statusListener;
+    private final ConfigurationListener configurationListener;
 
     public ConnectionListener(SensorHubService service,
                               StatusListener statusListener,
+                              ConfigurationListener configurationListener,
                               MqttPersistentSubscriber localSubscriber,
                               @Value("${local.topics.connection}") String topic) {
         this.service = service;
         this.statusListener = statusListener;
+        this.configurationListener = configurationListener;
         localSubscriber.subscribe(topic, this);
     }
 
     @Override
     public void handleMessage(String mac, MqttMessage message) {
         statusListener.addSubscription(mac);
-        // TODO: Config
+        configurationListener.addSubscription(mac);
         service.sensorHubConnected(mac);
     }
 }

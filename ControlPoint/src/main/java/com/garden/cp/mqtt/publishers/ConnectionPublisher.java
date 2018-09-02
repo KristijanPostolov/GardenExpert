@@ -17,6 +17,6 @@ public class ConnectionPublisher {
 
     public void publishConnection(String mac) {
         String topic = topicTemplate.replace("+", mac);
-        publisher.publishRetained(topic, "");
+        publisher.publish(topic, "", false);
     }
 }

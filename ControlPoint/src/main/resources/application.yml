@@ -6,10 +6,11 @@ local:
     connection: +/connection
 
 remote:
-  broker-url: tcp://localhost:1883
+  broker-url: tcp://localhost:1885
   topics:
     connection: +/connection
     status: +/status
+    configuration: +/configuration
 
 
 api_url: http://localhost:8080
