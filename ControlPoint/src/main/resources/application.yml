@@ -1,0 +1,16 @@
+
+local:
+  broker-url: tcp://localhost:1884
+  client-id: control_point_1
+  topics:
+    connection: +/connection
+
+remote:
+  broker-url: tcp://localhost:1883
+  topics:
+    connection: +/connection
+
+
+api_url = http://localhost:8080
+
+

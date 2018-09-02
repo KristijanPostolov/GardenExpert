@@ -1,6 +1,7 @@
 package com.garden.server.messaging.publishers;
 
 import com.garden.server.messaging.MessageMapper;
+import com.garden.server.messaging.messages.IdentifiedMessage;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -21,11 +22,16 @@ public class MqttPublisher {
         this.messageMapper = messageMapper;
     }
 
-    public void publishRetained(String topic, Object message) {
+    public void publishIdentified(String topic, Object message, boolean retained) {
+        IdentifiedMessage identifiedMessage = new IdentifiedMessage(mqttClient.getClientId(), message);
+        this.publish(topic, identifiedMessage, retained);
+    }
+
+    private void publish(String topic, Object message, boolean retained) {
         messageMapper.toJson(message)
                 .ifPresent(json -> {
                     MqttMessage mqttMessage = new MqttMessage(json.getBytes());
-                    mqttMessage.setRetained(true);
+                    mqttMessage.setRetained(retained);
                     try {
                         log.info("Publishing MQTT message to [{}]", topic);
                         mqttClient.publish(topic, mqttMessage);

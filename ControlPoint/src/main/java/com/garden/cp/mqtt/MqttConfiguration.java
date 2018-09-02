@@ -1,8 +1,5 @@
 package com.garden.cp.mqtt;
 
-import com.garden.cp.mqtt.handlers.ConnectionHandler;
-import com.garden.cp.mqtt.handlers.DisconnectionHandler;
-import com.garden.cp.mqtt.handlers.MeasurementsHandler;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -18,24 +15,39 @@ public class MqttConfiguration {
     private static final Logger log = LoggerFactory.getLogger(MqttConfiguration.class);
 
     @Bean
-    public MqttClient mqttClient(@Value("${broker_url}") String brokerUrl,
-                                 @Value("${client_id}") String clientId,
-                                 ConnectionHandler connectionHandler,
-                                 MeasurementsHandler measurementsHandler,
-                                 DisconnectionHandler disconnectionHandler) throws MqttException {
+    public MqttClient localMqttClient(@Value("${local-broker-url}") String brokerUrl,
+                                      @Value("${local-client-id}") String clientId) throws MqttException {
+        log.info("Connecting local MQTT client [{}], to broker [{}]", clientId, brokerUrl);
+        MqttClient client = startNewMqttClient(brokerUrl, clientId);
+        log.info("Local MQTT client [{}] connected", clientId);
+        return client;
+    }
 
+    @Bean
+    public MqttClient webMqttClient(@Value("${web-broker-url}") String brokerUrl,
+                                    @Value("${web-client-id}") String clientId) throws MqttException {
+        log.info("Connecting web MQTT client [{}], to broker [{}]", clientId, brokerUrl);
+        MqttClient client = startNewMqttClient(brokerUrl, clientId);
+        log.info("Web MQTT client [{}] connected", clientId);
+        return client;
+    }
+
+    private MqttClient startNewMqttClient(String brokerUrl, String clientId) throws MqttException {
         MqttClient mqttClient = new MqttClient(brokerUrl, clientId);
         MqttConnectOptions options = new MqttConnectOptions();
         options.setAutomaticReconnect(true);
-
-        log.info("Connecting MQTT client [{}], to broker [{}]", clientId, brokerUrl);
         mqttClient.connect(options);
-        log.info("MQTT client [{}] connected", clientId);
-
-        mqttClient.subscribe("connected", connectionHandler);
-        mqttClient.subscribe("measurements", measurementsHandler);
-        mqttClient.subscribe("disconnected", disconnectionHandler);
         return mqttClient;
+    }
+
+    @Bean
+    public MqttPersistentSubscriber localSubscriber(MqttClient localMqttClient) {
+        return new MqttPersistentSubscriber(localMqttClient);
+    }
+
+    @Bean
+    public MqttPersistentSubscriber webSubscriber(MqttClient webMqttClient) {
+        return new MqttPersistentSubscriber(webMqttClient);
     }
 
 }

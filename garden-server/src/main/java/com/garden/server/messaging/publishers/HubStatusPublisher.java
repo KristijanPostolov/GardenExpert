@@ -22,12 +22,8 @@ public class HubStatusPublisher {
         message.sprinklerActive = hubStatus.isSprinklerActive();
 
         String mac = hubStatus.getSensorHub().getMacAddress();
-        this.publish(mac, message);
-    }
-
-    public void publish(String mac, HubStatusMessage hubStatusMessage) {
         String topic = topicTemplate.replace("+", mac);
-        mqttPublisher.publishRetained(topic, hubStatusMessage);
+        mqttPublisher.publishIdentified(topic, message, true);
     }
 
 }

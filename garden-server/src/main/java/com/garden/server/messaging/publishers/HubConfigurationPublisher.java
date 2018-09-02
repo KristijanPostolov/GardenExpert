@@ -31,12 +31,8 @@ public class HubConfigurationPublisher {
         message.triggeredWateringDurationSeconds = hubConfiguration.getTriggeredWateringDurationSeconds();
 
         String mac = hubConfiguration.getSensorHub().getMacAddress();
-        this.publish(mac, message);
-    }
-
-    public void publish(String mac, HubConfigurationMessage message) {
         String topic = topicTemplate.replace("+", mac);
-        mqttPublisher.publishRetained(topic, message);
+        mqttPublisher.publishIdentified(topic, message, true);
     }
 
 }

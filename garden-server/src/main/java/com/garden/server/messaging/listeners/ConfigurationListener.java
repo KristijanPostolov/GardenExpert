@@ -2,6 +2,7 @@ package com.garden.server.messaging.listeners;
 
 import com.garden.server.messaging.MessageMapper;
 import com.garden.server.messaging.messages.HubConfigurationMessage;
+import com.garden.server.messaging.messages.IdentifiedMessage;
 import com.garden.server.service.HubConfigurationService;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -18,17 +19,21 @@ public class ConfigurationListener extends MacPrefixTopicListener {
 
     private final MessageMapper messageMapper;
     private final HubConfigurationService service;
+    private final String clientId;
 
     public ConfigurationListener(MessageMapper messageMapper, HubConfigurationService service, MqttClient mqttClient,
                                  @Value("${mqtt.topics.configuration}") String topic) throws MqttException {
         this.messageMapper = messageMapper;
         this.service = service;
+        this.clientId = mqttClient.getClientId();
         mqttClient.subscribe(topic, this);
     }
 
     @Override
     public void handleMessage(String mac, MqttMessage message) {
-        messageMapper.fromJson(message.getPayload(), HubConfigurationMessage.class)
+        messageMapper.fromJson(message.getPayload(), IdentifiedMessage.class)
+                .filter(identifiedMessage -> !identifiedMessage.getClientId().equals(clientId))
+                .map(identifiedMessage -> identifiedMessage.getContent(HubConfigurationMessage.class))
                 .ifPresent(hubConfigurationMessage -> {
                     log.info("Configuration received from [{}]", mac);
                     service.updateConfigurationForMacAddress(mac, hubConfigurationMessage);
