@@ -11,7 +11,7 @@ public abstract class MacPrefixTopicListener implements IMqttMessageListener {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) {
-        log.debug("Received MQTT message on [{}]", topic);
+        log.debug("Received local MQTT message on [{}]", topic);
         String macAddress = topic.replaceAll("/.*", "");
         handleMessage(macAddress, message);
     }

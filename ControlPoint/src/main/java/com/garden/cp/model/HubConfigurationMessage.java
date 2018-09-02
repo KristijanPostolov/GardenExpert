@@ -1,6 +1,4 @@
-package com.garden.server.messaging.messages;
-
-import com.garden.server.model.HubConfiguration;
+package com.garden.cp.model;
 
 public class HubConfigurationMessage {
 
@@ -14,19 +12,5 @@ public class HubConfigurationMessage {
     public int regularWateringDurationSeconds;
     public float minMoistureThreshold;
     public int triggeredWateringDurationSeconds;
-
-    public boolean isSame(HubConfiguration hubConfiguration) {
-        return hubConfiguration != null &&
-                updateIntervalInSeconds == hubConfiguration.getUpdateIntervalSeconds() &&
-                autoControl == hubConfiguration.isAutoControl() &&
-                minDailyCelsius == hubConfiguration.getMinDailyCelsius() &&
-                targetDailyCelsius == hubConfiguration.getTargetDailyCelsius() &&
-                minNightlyCelsius == hubConfiguration.getMinNightlyCelsius() &&
-                targetNightlyCelsius == hubConfiguration.getTargetNightlyCelsius() &&
-                regularWateringCycleSeconds == hubConfiguration.getRegularWateringCycleSeconds() &&
-                regularWateringDurationSeconds == hubConfiguration.getRegularWateringDurationSeconds() &&
-                minMoistureThreshold == hubConfiguration.getMinMoistureThreshold() &&
-                triggeredWateringDurationSeconds == hubConfiguration.getTriggeredWateringDurationSeconds();
-    }
 
 }

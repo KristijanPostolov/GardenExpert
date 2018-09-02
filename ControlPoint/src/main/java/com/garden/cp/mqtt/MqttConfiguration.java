@@ -1,5 +1,6 @@
 package com.garden.cp.mqtt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -15,8 +16,8 @@ public class MqttConfiguration {
     private static final Logger log = LoggerFactory.getLogger(MqttConfiguration.class);
 
     @Bean
-    public MqttClient localMqttClient(@Value("${local-broker-url}") String brokerUrl,
-                                      @Value("${local-client-id}") String clientId) throws MqttException {
+    public MqttClient localMqttClient(@Value("${local.broker-url}") String brokerUrl,
+                                      @Value("${local.client-id}") String clientId) throws MqttException {
         log.info("Connecting local MQTT client [{}], to broker [{}]", clientId, brokerUrl);
         MqttClient client = startNewMqttClient(brokerUrl, clientId);
         log.info("Local MQTT client [{}] connected", clientId);
@@ -24,8 +25,8 @@ public class MqttConfiguration {
     }
 
     @Bean
-    public MqttClient webMqttClient(@Value("${web-broker-url}") String brokerUrl,
-                                    @Value("${web-client-id}") String clientId) throws MqttException {
+    public MqttClient remoteMqttClient(@Value("${remote.broker-url}") String brokerUrl) throws MqttException {
+        String clientId = MqttClient.generateClientId();
         log.info("Connecting web MQTT client [{}], to broker [{}]", clientId, brokerUrl);
         MqttClient client = startNewMqttClient(brokerUrl, clientId);
         log.info("Web MQTT client [{}] connected", clientId);
@@ -46,8 +47,13 @@ public class MqttConfiguration {
     }
 
     @Bean
-    public MqttPersistentSubscriber webSubscriber(MqttClient webMqttClient) {
-        return new MqttPersistentSubscriber(webMqttClient);
+    public MqttPersistentSubscriber remoteSubscriber(MqttClient remoteMqttClient) {
+        return new MqttPersistentSubscriber(remoteMqttClient);
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
     }
 
 }

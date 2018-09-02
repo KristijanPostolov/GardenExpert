@@ -9,8 +9,9 @@ remote:
   broker-url: tcp://localhost:1883
   topics:
     connection: +/connection
+    status: +/status
 
 
-api_url = http://localhost:8080
+api_url: http://localhost:8080
 
 
