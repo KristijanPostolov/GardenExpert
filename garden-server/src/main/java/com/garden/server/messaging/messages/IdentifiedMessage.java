@@ -1,17 +1,15 @@
 package com.garden.server.messaging.messages;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class IdentifiedMessage {
 
     private String clientId;
-    private Object content;
+    private String content;
 
     public IdentifiedMessage() {
 
     }
 
-    public IdentifiedMessage(String clientId, Object content) {
+    public IdentifiedMessage(String clientId, String content) {
         this.clientId = clientId;
         this.content = content;
     }
@@ -24,16 +22,12 @@ public class IdentifiedMessage {
         this.clientId = clientId;
     }
 
-    public Object getContent() {
+    public String getContent() {
         return content;
     }
 
-    public void setContent(Object content) {
+    public void setContent(String content) {
         this.content = content;
     }
 
-    @JsonIgnore
-    public <T> T getContent(Class<T> type) {
-        return type.isInstance(content) ? type.cast(content) : null;
-    }
 }

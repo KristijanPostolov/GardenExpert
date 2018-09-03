@@ -23,8 +23,11 @@ public class MqttPublisher {
     }
 
     public void publishIdentified(String topic, Object message, boolean retained) {
-        IdentifiedMessage identifiedMessage = new IdentifiedMessage(mqttClient.getClientId(), message);
-        this.publish(topic, identifiedMessage, retained);
+        messageMapper.toJson(message).ifPresent(json ->{
+            IdentifiedMessage identifiedMessage =
+                    new IdentifiedMessage(mqttClient.getClientId(), json);
+            this.publish(topic, identifiedMessage, retained);
+        });
     }
 
     private void publish(String topic, Object message, boolean retained) {

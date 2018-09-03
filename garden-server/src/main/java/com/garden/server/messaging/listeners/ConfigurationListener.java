@@ -33,10 +33,12 @@ public class ConfigurationListener extends MacPrefixTopicListener {
     public void handleMessage(String mac, MqttMessage message) {
         messageMapper.fromJson(message.getPayload(), IdentifiedMessage.class)
                 .filter(identifiedMessage -> !identifiedMessage.getClientId().equals(clientId))
-                .map(identifiedMessage -> identifiedMessage.getContent(HubConfigurationMessage.class))
-                .ifPresent(hubConfigurationMessage -> {
-                    log.info("Configuration received from [{}]", mac);
-                    service.updateConfigurationForMacAddress(mac, hubConfigurationMessage);
-                });
+                .map(identifiedMessage ->
+                        messageMapper.fromJson(identifiedMessage.getContent(), HubConfigurationMessage.class))
+                .ifPresent(optionalHubConfigurationMessage ->
+                        optionalHubConfigurationMessage.ifPresent(hubConfigurationMessage -> {
+                            log.info("Configuration received from [{}]", mac);
+                            service.updateConfigurationForMacAddress(mac, hubConfigurationMessage);
+                        }));
     }
 }

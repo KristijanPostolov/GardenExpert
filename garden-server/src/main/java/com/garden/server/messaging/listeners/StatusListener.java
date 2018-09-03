@@ -33,10 +33,11 @@ public class StatusListener extends MacPrefixTopicListener {
     public void handleMessage(String mac, MqttMessage message) {
         messageMapper.fromJson(message.getPayload(), IdentifiedMessage.class)
                 .filter(identifiedMessage -> !identifiedMessage.getClientId().equals(clientId))
-                .map(identifiedMessage -> identifiedMessage.getContent(HubStatusMessage.class))
-                .ifPresent(hubStatusMessage -> {
+                .map(identifiedMessage ->
+                        messageMapper.fromJson(identifiedMessage.getContent(), HubStatusMessage.class))
+                .ifPresent(optionalHubStatusMessage -> optionalHubStatusMessage.ifPresent(hubStatusMessage -> {
                     log.info("Status received for [{}]", mac);
                     service.updateForMac(mac, hubStatusMessage);
-                });
+                }));
     }
 }
