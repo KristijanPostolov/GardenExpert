@@ -2,6 +2,7 @@ package com.garden.cp.mqtt.publishers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.garden.cp.model.IdentifiedMessage;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -36,6 +37,16 @@ public class MqttPublisher {
             log.error("Could not serialize message for topic [{}]", topic, e);
         } catch (MqttException e) {
             log.error("Could not publish message from client [{}]", mqttClient.getClientId(), e);
+        }
+    }
+
+    public void publishIdentified(String topic, Object message, boolean reatined) {
+        try {
+            String json = objectMapper.writeValueAsString(message);
+            IdentifiedMessage identifiedMessage = new IdentifiedMessage(mqttClient.getClientId(), json);
+            publish(topic, identifiedMessage, reatined);
+        } catch (JsonProcessingException e) {
+            log.error("Could not serialize identified message", e);
         }
     }
 }

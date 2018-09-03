@@ -44,7 +44,7 @@ public class ConfigurationListener extends MacPrefixTopicListener{
                     objectMapper.readValue(identifiedMessage.getContent(), HubConfigurationMessage.class);
             service.updateConfiguration(mac, hubConfigurationMessage);
         } catch (IOException e) {
-            log.error("Could not deserialize status message");
+            log.error("Could not deserialize configuration message");
         }
     }
 

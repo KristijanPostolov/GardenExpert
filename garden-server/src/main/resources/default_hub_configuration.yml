@@ -1,10 +1,10 @@
 update-interval-seconds: 300
-auto-control: false
+auto-control: true
 min-daily-celsius: 20.0
 target-daily-celsius: 23.0
 min-nightly-celsius: 17.0
 target-nightly-celsius: 20.0
 regular-watering-cycle-seconds: 86400
 regular-watering-duration-seconds: 300
-min-moisture-threshold: 25.0
+min-moisture-threshold: 55.0
 triggered-watering-duration-seconds: 60

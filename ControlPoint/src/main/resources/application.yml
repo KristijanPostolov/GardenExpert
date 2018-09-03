@@ -5,6 +5,8 @@ local:
   topics:
     connection: +/connection
     measurement: +/measurement
+    heater: +/heater
+    sprinkler: +/sprinkler
 
 remote:
   broker-url: tcp://localhost:1885
