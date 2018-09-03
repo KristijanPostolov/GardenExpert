@@ -22,4 +22,8 @@ public class StatusService {
         repository.putStatus(mac, statusMessage);
     }
 
+    public HubStatusMessage getStatus(String mac) {
+        return repository.getStatus(mac);
+    }
+
 }

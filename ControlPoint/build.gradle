@@ -28,6 +28,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
 	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.6'
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.6'
+	compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.7.3'
 	compile group: 'org.eclipse.paho', name: 'org.eclipse.paho.client.mqttv3', version: '1.2.0'
 	runtime('org.springframework.boot:spring-boot-devtools')
 	testCompile('org.springframework.boot:spring-boot-starter-test')

@@ -21,4 +21,8 @@ public class ConfigurationService {
         log.info("Updating configuration for [{}]", mac);
         repository.putConfiguration(mac, hubConfigurationMessage);
     }
+
+    public HubConfigurationMessage getConfiguration(String mac) {
+        return repository.getConfiguration(mac);
+    }
 }

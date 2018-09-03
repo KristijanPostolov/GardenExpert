@@ -4,6 +4,7 @@ local:
   client-id: control_point_1
   topics:
     connection: +/connection
+    measurement: +/measurement
 
 remote:
   broker-url: tcp://localhost:1885
@@ -11,6 +12,7 @@ remote:
     connection: +/connection
     status: +/status
     configuration: +/configuration
+    measurement: +/measurement
 
 
 api_url: http://localhost:8080

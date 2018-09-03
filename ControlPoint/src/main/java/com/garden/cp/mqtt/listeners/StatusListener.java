@@ -39,7 +39,8 @@ public class StatusListener extends MacPrefixTopicListener {
             if(remoteSubscriber.getClientId().equals(identifiedMessage.getClientId())) {
                 return;
             }
-            HubStatusMessage hubStatusMessage = identifiedMessage.getContent(HubStatusMessage.class);
+            HubStatusMessage hubStatusMessage =
+                    objectMapper.readValue(identifiedMessage.getContent(), HubStatusMessage.class);
             service.updateStatus(mac, hubStatusMessage);
         } catch (IOException e) {
             log.error("Could not deserialize status message");
