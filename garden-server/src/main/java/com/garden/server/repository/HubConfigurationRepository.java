@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface HubConfigurationRepository extends JpaRepository<HubConfiguration, Long> {
 
+    HubConfiguration findBySensorHub_Id(Long id);
     HubConfiguration findBySensorHub_MacAddress(String macAddress);
 
 }

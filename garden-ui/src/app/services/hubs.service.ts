@@ -19,4 +19,17 @@ export class HubsService {
     return this.http.get<SensorHub[]>(`api/hubs?name=${name}`);
   }
 
+  findById(id: number): Observable<SensorHub> {
+    console.log('http GET by id' + id);
+    return this.http.get<SensorHub>(`api/hubs/${id}`);
+  }
+
+  updateStatus(id: number, status: HubStatus): Observable<HubStatus> {
+    return this.http.patch<HubStatus>(`api/hubs/${id}/status`, status);
+  }
+
+  updateConfiguration(id: number, config: HubConfiguration): Observable<HubConfiguration> {
+    return this.http.patch<HubConfiguration>(`api/hubs/${id}/configuration`, config);
+  }
+
 }

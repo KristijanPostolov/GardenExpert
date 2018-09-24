@@ -21,11 +21,11 @@ public class SensorHub {
     @Column(name = "last_measurement")
     private LocalDateTime lastMeasurement;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "sensorHub")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "sensorHub", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("sensorHub")
     private HubConfiguration hubConfiguration;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "sensorHub")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "sensorHub", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("sensorHub")
     private HubStatus hubStatus;
 

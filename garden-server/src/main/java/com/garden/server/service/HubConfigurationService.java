@@ -82,4 +82,21 @@ public class HubConfigurationService {
         return hubConfiguration;
     }
 
+    @Transactional
+    public HubConfiguration update(Long id, HubConfigurationMessage message) {
+        HubConfiguration hubConfiguration = repository.findBySensorHub_Id(id);
+        hubConfiguration.setUpdateIntervalSeconds(message.updateIntervalInSeconds);
+        hubConfiguration.setAutoControl(message.autoControl);
+        hubConfiguration.setMinDailyCelsius(message.minDailyCelsius);
+        hubConfiguration.setTargetDailyCelsius(message.targetDailyCelsius);
+        hubConfiguration.setMinNightlyCelsius(message.minNightlyCelsius);
+        hubConfiguration.setTargetNightlyCelsius(message.targetNightlyCelsius);
+        hubConfiguration.setRegularWateringCycleSeconds(message.regularWateringCycleSeconds);
+        hubConfiguration.setRegularWateringDurationSeconds(message.regularWateringDurationSeconds);
+        hubConfiguration.setMinMoistureThreshold(message.minMoistureThreshold);
+        hubConfiguration.setTriggeredWateringDurationSeconds(message.triggeredWateringDurationSeconds);
+        log.info("Updating configuration for [{}]", id);
+        return hubConfiguration;
+    }
+
 }

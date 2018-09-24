@@ -1,3 +1,84 @@
-<p>
-  hub-details works!
-</p>
+<div class="container">
+  <div *ngIf="hub">
+    <h1>{{hub.name}}</h1>
+    <h2>{{hub.macAddress}}</h2>
+    <i>Last measurement {{hub.lastMeasurement}}</i>
+
+    <form class="form-horizontal border" style="padding: 10px; margin: 5px;">
+      <b>Status:</b>
+      <div class="input-group" style="margin: 10px">
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input type="checkbox" [checked]="hub.hubStatus.heaterActive"
+                   (change)="hub.hubStatus.heaterActive = !hub.hubStatus.heaterActive">
+          </div>
+        </div>
+        <p type="text" class="form-control">Heater</p>
+      </div>
+      <div class="input-group" style="margin: 10px">
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input type="checkbox" [checked]="hub.hubStatus.sprinklerActive"
+                   (change)="hub.hubStatus.sprinklerActive = !hub.hubStatus.sprinklerActive">
+          </div>
+        </div>
+        <p type="text" class="form-control">Sprinkler</p>
+      </div>
+      <button type="submit" class="btn btn-success" style="margin: 10px" (click)="updateStatus()">Apply</button>
+    </form>
+
+    <form class="form-horizontal border" style="padding: 10px; margin: 5px;">
+      <b>Configuration:</b>
+      <div class="input-group" style="margin: 10px">
+        <label for="updateIntervalSeconds">updateInterval</label>
+        <input name="updateIntervalSeconds" id="updateIntervalSeconds" type="number" class="form-control" [(ngModel)]="hub.hubConfiguration.updateIntervalSeconds">
+      </div>
+      <div class="input-group" style="margin: 10px">
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input type="checkbox" [checked]="hub.hubConfiguration.autoControl"
+                   (change)="hub.hubConfiguration.autoControl = !hub.hubConfiguration.autoControl">
+          </div>
+        </div>
+        <p type="text" class="form-control">autoControl</p>
+      </div>
+      <div class="input-group" style="margin: 10px">
+        <label for="minDailyCelsius">minDailyCelsius</label>
+        <input name="minDailyCelsius" id="minDailyCelsius" type="number" class="form-control" [(ngModel)]="hub.hubConfiguration.minDailyCelsius">
+      </div>
+      <div class="input-group" style="margin: 10px">
+        <label for="targetDailyCelsius">targetDailyCelsius</label>
+        <input name="targetDailyCelsius" id="targetDailyCelsius" type="number" class="form-control" [(ngModel)]="hub.hubConfiguration.targetDailyCelsius">
+      </div>
+      <div class="input-group" style="margin: 10px">
+        <label for="minNightlyCelsius">minNightlyCelsius</label>
+        <input name="minNightlyCelsius" id="minNightlyCelsius" type="number" class="form-control" [(ngModel)]="hub.hubConfiguration.minNightlyCelsius">
+      </div>
+      <div class="input-group" style="margin: 10px">
+        <label for="targetNightlyCelsius">targetNightlyCelsius</label>
+        <input name="targetNightlyCelsius" id="targetNightlyCelsius" type="number" class="form-control" [(ngModel)]="hub.hubConfiguration.targetNightlyCelsius">
+      </div>
+      <div class="input-group" style="margin: 10px">
+        <label for="regularWateringCycleSeconds">regularWateringCycleSeconds</label>
+        <input name="regularWateringCycleSeconds" id="regularWateringCycleSeconds" type="number" class="form-control" [(ngModel)]="hub.hubConfiguration.regularWateringCycleSeconds">
+      </div>
+      <div class="input-group" style="margin: 10px">
+        <label for="regularWateringDurationSeconds">regularWateringDurationSeconds</label>
+        <input name="regularWateringDurationSeconds" id="regularWateringDurationSeconds" type="number" class="form-control" [(ngModel)]="hub.hubConfiguration.regularWateringDurationSeconds">
+      </div>
+      <div class="input-group" style="margin: 10px">
+        <label for="minMoistureThreshold">minMoistureThreshold</label>
+        <input name="minMoistureThreshold" id="minMoistureThreshold" type="number" class="form-control" [(ngModel)]="hub.hubConfiguration.minMoistureThreshold">
+      </div>
+      <div class="input-group" style="margin: 10px">
+        <label for="triggeredWateringDurationSeconds">triggeredWateringDurationSeconds</label>
+        <input name="triggeredWateringDurationSeconds" id="triggeredWateringDurationSeconds" type="number" class="form-control" [(ngModel)]="hub.hubConfiguration.triggeredWateringDurationSeconds">
+      </div>
+      <button type="submit" class="btn btn-success" style="margin: 10px" (click)="updateConfiguration()">Apply</button>
+    </form>
+
+    {{hub | json}}
+  </div>
+</div>
+
+

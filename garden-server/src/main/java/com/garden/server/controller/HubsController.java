@@ -1,8 +1,10 @@
 package com.garden.server.controller;
 
-import com.garden.server.model.Measurement;
-import com.garden.server.model.MeasurementType;
-import com.garden.server.model.SensorHub;
+import com.garden.server.messaging.messages.HubConfigurationMessage;
+import com.garden.server.messaging.messages.HubStatusMessage;
+import com.garden.server.model.*;
+import com.garden.server.service.HubConfigurationService;
+import com.garden.server.service.HubStatusService;
 import com.garden.server.service.MeasurementService;
 import com.garden.server.service.SensorHubService;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,10 +20,15 @@ public class HubsController {
 
     private final SensorHubService sensorHubService;
     private final MeasurementService measurementService;
+    private final HubStatusService hubStatusService;
+    private final HubConfigurationService hubConfigurationService;
 
-    public HubsController(SensorHubService sensorHubService, MeasurementService measurementService) {
+    public HubsController(SensorHubService sensorHubService, MeasurementService measurementService,
+                          HubStatusService hubStatusService, HubConfigurationService hubConfigurationService) {
         this.sensorHubService = sensorHubService;
         this.measurementService = measurementService;
+        this.hubStatusService = hubStatusService;
+        this.hubConfigurationService = hubConfigurationService;
     }
 
     @GetMapping
@@ -68,6 +75,17 @@ public class HubsController {
         return measurementService.getMeasurements(id, from, to, type)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PatchMapping("/{id}/status")
+    public HubStatus updateStatus(@PathVariable("id") Long id, @RequestBody HubStatusMessage hubStatusMessage) {
+        return hubStatusService.update(id, hubStatusMessage);
+    }
+
+    @PatchMapping("/{id}/configuration")
+    public HubConfiguration updateConfiguration(@PathVariable("id") Long id,
+                                                @RequestBody HubConfigurationMessage hubConfigurationMessage) {
+        return hubConfigurationService.update(id, hubConfigurationMessage);
     }
 
 }

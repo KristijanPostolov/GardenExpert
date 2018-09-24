@@ -38,6 +38,15 @@ public class HubStatusService {
     }
 
     @Transactional
+    public HubStatus update(Long id, HubStatusMessage hubStatusMessage) {
+        HubStatus status = repository.findBySensorHub_Id(id);
+        log.info("Updating status for sensorHub [{}]", id);
+        status.setHeaterActive(hubStatusMessage.heaterActive);
+        status.setSprinklerActive(hubStatusMessage.sprinklerActive);
+        return repository.save(status);
+    }
+
+    @Transactional
     public HubStatus updateForMac(String mac, HubStatusMessage message) {
         HubStatus hubStatus = repository.findBySensorHub_MacAddress(mac);
         hubStatus.setHeaterActive(message.heaterActive);
