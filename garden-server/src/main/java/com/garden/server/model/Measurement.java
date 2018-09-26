@@ -1,5 +1,7 @@
 package com.garden.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -22,6 +24,7 @@ public class Measurement {
 
     @JoinColumn(name = "sensor_hub")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonIgnore
     private SensorHub sensorHub;
 
     public Measurement() {

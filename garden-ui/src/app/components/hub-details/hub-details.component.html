@@ -77,8 +77,18 @@
       <button type="submit" class="btn btn-success" style="margin: 10px" (click)="updateConfiguration()">Apply</button>
     </form>
 
-    {{hub | json}}
+    <div *ngIf="chartData" style="width: 70%; margin: 50px; text-align: center">
+      <canvas
+        baseChart
+        [chartType]="'line'"
+        [datasets]="chartData"
+        [labels]="timestamps"
+        [options]="chartOptions"
+        [legend]="true">
+      </canvas>
+    </div>
   </div>
 </div>
+
 
 

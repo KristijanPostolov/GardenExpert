@@ -5,8 +5,6 @@ import {HttpClient} from '@angular/common/http';
 @Injectable()
 export class HubsService {
 
-  private api = 'http://localhost:8080';
-
   constructor(private http: HttpClient) { }
 
   searchHubsByMac(mac: string): Observable<SensorHub[]> {

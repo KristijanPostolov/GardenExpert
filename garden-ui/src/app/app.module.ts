@@ -9,6 +9,8 @@ import { HttpClientModule} from '@angular/common/http';
 import {HubsService} from './services/hubs.service';
 import { AppRoutingModule } from './/app-routing.module';
 import { HubDetailsComponent } from './components/hub-details/hub-details.component';
+import {ChartsModule} from 'ng2-charts';
+import {MeasurementsService} from './services/measurements.service';
 
 
 @NgModule({
@@ -21,10 +23,12 @@ import { HubDetailsComponent } from './components/hub-details/hub-details.compon
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ChartsModule
   ],
   providers: [
-    HubsService
+    HubsService,
+    MeasurementsService
   ],
   bootstrap: [AppComponent]
 })
