@@ -17,7 +17,7 @@ public class StatusPublisher {
 
     public void publishStatus(String mac, HubStatusMessage statusMessage) {
         String topic = topicTemplate.replace("+", mac);
-        //publisher.publishIdentified(topic, statusMessage, true);
+        publisher.publishIdentified(topic, statusMessage, true);
     }
 
 }
