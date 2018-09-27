@@ -1,9 +1,5 @@
 package com.garden.server.messaging;
 
-import com.garden.server.messaging.listeners.ConfigurationListener;
-import com.garden.server.messaging.listeners.ConnectionListener;
-import com.garden.server.messaging.listeners.MeasurementListener;
-import com.garden.server.messaging.listeners.StatusListener;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;

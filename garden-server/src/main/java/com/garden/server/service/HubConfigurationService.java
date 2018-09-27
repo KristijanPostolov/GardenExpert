@@ -1,5 +1,6 @@
 package com.garden.server.service;
 
+import com.garden.server.messaging.publishers.HubConfigurationPublisher;
 import com.garden.server.model.HubConfiguration;
 import com.garden.server.model.SensorHub;
 import com.garden.server.messaging.messages.HubConfigurationMessage;
@@ -30,6 +31,7 @@ public class HubConfigurationService {
     private final int triggeredWateringDurationSeconds;
 
     private final HubConfigurationRepository repository;
+    private final HubConfigurationPublisher publisher;
 
     public HubConfigurationService(@Value("${update-interval-seconds}") Integer updateIntervalInSeconds,
                                    @Value("${auto-control}") Boolean autoControl,
@@ -41,7 +43,7 @@ public class HubConfigurationService {
                                    @Value("${regular-watering-duration-seconds}") Integer regularWateringDurationSeconds,
                                    @Value("${min-moisture-threshold}") Float minMoistureThreshold,
                                    @Value("${triggered-watering-duration-seconds}") Integer triggeredWateringDurationSeconds,
-                                   HubConfigurationRepository repository) {
+                                   HubConfigurationRepository repository, HubConfigurationPublisher publisher) {
         this.updateIntervalInSeconds = updateIntervalInSeconds;
         this.autoControl = autoControl;
         this.minDailyCelsius = minDailyCelsius;
@@ -53,6 +55,7 @@ public class HubConfigurationService {
         this.minMoistureThreshold = minMoistureThreshold;
         this.triggeredWateringDurationSeconds = triggeredWateringDurationSeconds;
         this.repository = repository;
+        this.publisher = publisher;
     }
 
     public HubConfiguration saveDefaultConfiguration(SensorHub sensorHub) {
@@ -79,6 +82,7 @@ public class HubConfigurationService {
         hubConfiguration.setRegularWateringDurationSeconds(message.regularWateringDurationSeconds);
         hubConfiguration.setMinMoistureThreshold(message.minMoistureThreshold);
         hubConfiguration.setTriggeredWateringDurationSeconds(message.triggeredWateringDurationSeconds);
+        publisher.publish(hubConfiguration);
         return hubConfiguration;
     }
 
@@ -96,6 +100,7 @@ public class HubConfigurationService {
         hubConfiguration.setMinMoistureThreshold(message.minMoistureThreshold);
         hubConfiguration.setTriggeredWateringDurationSeconds(message.triggeredWateringDurationSeconds);
         log.info("Updating configuration for [{}]", id);
+        publisher.publish(hubConfiguration);
         return hubConfiguration;
     }
 

@@ -1,6 +1,7 @@
 package com.garden.server.service;
 
 import com.garden.server.messaging.messages.HubStatusMessage;
+import com.garden.server.messaging.publishers.HubStatusPublisher;
 import com.garden.server.model.HubStatus;
 import com.garden.server.model.SensorHub;
 import com.garden.server.repository.HubStatusRepository;
@@ -22,13 +23,15 @@ public class HubStatusService {
     private final boolean defaultSprinklerActive;
 
     private final HubStatusRepository repository;
+    private final HubStatusPublisher publisher;
 
     public HubStatusService(@Value("${heater-active}") Boolean defaultHeaterActive,
                             @Value("${sprinkler-active}") Boolean defaultSprinklerActive,
-                            HubStatusRepository repository) {
+                            HubStatusRepository repository, HubStatusPublisher publisher) {
         this.defaultHeaterActive = defaultHeaterActive;
         this.defaultSprinklerActive = defaultSprinklerActive;
         this.repository = repository;
+        this.publisher = publisher;
     }
 
     public HubStatus saveDefaultStatus(SensorHub sensorHub) {
@@ -43,6 +46,7 @@ public class HubStatusService {
         log.info("Updating status for sensorHub [{}]", id);
         status.setHeaterActive(hubStatusMessage.heaterActive);
         status.setSprinklerActive(hubStatusMessage.sprinklerActive);
+        publisher.publish(status);
         return repository.save(status);
     }
 
@@ -51,6 +55,7 @@ public class HubStatusService {
         HubStatus hubStatus = repository.findBySensorHub_MacAddress(mac);
         hubStatus.setHeaterActive(message.heaterActive);
         hubStatus.setSprinklerActive(message.sprinklerActive);
+        publisher.publish(hubStatus);
         return hubStatus;
     }
 

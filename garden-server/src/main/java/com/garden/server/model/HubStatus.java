@@ -1,5 +1,6 @@
 package com.garden.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ public class HubStatus {
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "sensor_hub_id", nullable = false)
     @JsonIgnoreProperties("hubStatus")
+    @JsonIgnore
     private SensorHub sensorHub;
 
     @Column(name = "heater_active", nullable = false)
